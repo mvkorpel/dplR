@@ -315,11 +315,19 @@ rwi.stats.running <- function(rwi, ids=NULL, period=c("max", "common"),
             n <- nTrees
         } else {
             ## Number of trees averaged over the years in the window.
+            ##
+            ## Previous:
             ## We keep this number separate of the correlation
             ## estimates, i.e. the data from some tree / year may
             ## contribute to n without taking part in the correlation
             ## estimates.
-            n <- mean(n.trees.by.year[year.idx])
+            ## n <- mean(n.trees.by.year[year.idx])
+            ##
+            ## Update:
+            ## Make EPS and SNR more about "expressed" than "extrapolated" by
+            ## only considering trees listed in good.trees.
+            n.good.by.year <- rowSums(tree.any[, good.trees, drop = FALSE])
+            n <- mean(n.good.by.year[year.idx])
         }
 
         ## Expressed population signal
